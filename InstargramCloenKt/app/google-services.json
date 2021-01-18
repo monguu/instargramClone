@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "961723430239",
+    "project_id": "instargramcloenkt",
+    "storage_bucket": "instargramcloenkt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:961723430239:android:db75ac0f9302729bcc32ea",
+        "android_client_info": {
+          "package_name": "com.monggu.instargramcloenkt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "961723430239-r262i3n8ctdh7o6p0vg50quus91m6t68.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdqcDUtl0DNcPiXfwDKZelxj6ZDw4oGPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "961723430239-r262i3n8ctdh7o6p0vg50quus91m6t68.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
