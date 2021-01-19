@@ -22,7 +22,7 @@
 
 
         <EditText
-            android:id="@+id/text_edit_id"
+            android:id="@+id/edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -46,7 +46,7 @@
 
 
         <EditText
-            android:id="@+id/text_edit_password"
+            android:id="@+id/editpassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"

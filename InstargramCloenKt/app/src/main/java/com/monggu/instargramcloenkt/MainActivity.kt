@@ -1,10 +1,11 @@
 package com.monggu.instargramcloenkt
 
-import android.content.Context
+
 import android.content.Intent
-import android.content.pm.PackageInfo
+
 import android.content.pm.PackageManager
 import android.os.Bundle
+
 import android.util.Base64
 import android.util.Log
 import android.widget.Toast
@@ -24,30 +25,36 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import kotlinx.android.synthetic.main.activity_main.*
+import com.monggu.instargramcloenkt.databinding.ActivityMainBinding
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
+    var activityMainBinding : ActivityMainBinding? = null
+    var binding = ActivityMainBinding.inflate(layoutInflater)
     var auth: FirebaseAuth? = null
     var googleSignInClient: GoogleSignInClient? = null
-    var GOOGLE_LOGIN_CODE = 9001
+    var GOOGLE_LOGIN_CODE = 300
     var callbackManager : CallbackManager? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        var binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        activityMainBinding = binding
         auth = FirebaseAuth.getInstance()
-        btn_sign.setOnClickListener {
+        binding.btnSign.setOnClickListener {
             signinAndSignup()
+
         }
         //3
-        btn_google.setOnClickListener {
+        binding.btnGoogle.setOnClickListener {
             googleLogin()
-            Log.d("로그", "login btn")
+            Log.d("로그", "${googleLogin()}")
         }
-        btn_facebook.setOnClickListener {
+        binding.btnFacebook.setOnClickListener {
             facebookLogin()
         }
         //구글 signin code 1
@@ -56,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
-        printHashKey()
+//        printHashKey()
         //페이스북 콜백
         callbackManager = CallbackManager.Factory.create()
 
@@ -87,17 +94,13 @@ class MainActivity : AppCompatActivity() {
                     //페이스북 스텝 2
                     handleFacebookAccessToken(result?.accessToken)
                 }
-
                 override fun onCancel() {
-
                 }
-
                 override fun onError(error: FacebookException?) {
-
                 }
-
             })
     }
+
     fun handleFacebookAccessToken(token : AccessToken?){
         val credential = FacebookAuthProvider.getCredential(token?.token!!)
     auth?.signInWithCredential(credential)
@@ -110,7 +113,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
     //화면전환 구글로그인 성공값? true//4
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -120,13 +122,14 @@ class MainActivity : AppCompatActivity() {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)
-                firebaseAuthWithGoogle(account)
+                firebaseAuthWithGoogle(account!!)
             }catch (e: ApiException){
-
+            Log.d("로그","Google login ib failed",e)
             }
         }
 
     }
+
         /*if (requestCode == GOOGLE_LOGIN_CODE) {
             var result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
             if (result.isSuccess) {
@@ -138,19 +141,21 @@ class MainActivity : AppCompatActivity() {
 
 
     //구글 파이어베이스 연동5
-    fun firebaseAuthWithGoogle(acct: GoogleSignInAccount?) {
-        val credential = GoogleAuthProvider.getCredential(acct?.idToken, null)
+    fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
+        Log.d("로그", "firebaseAuthWithGoogle:"+acct.id)
+        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         auth!!.signInWithCredential(credential)
-            .addOnCompleteListener(this) {
-                if (it.isSuccessful) {
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
                     //로그인 성공시
-                        val user = auth?.currentUser
+
                     Toast.makeText(this, "login success!", Toast.LENGTH_SHORT).show()
-                    Log.d("로그", "successful")
+                    Log.d("로그", "successful", task.exception)
+                    moveMainPage(task.result?.user)
                 } else {
                     //로그인 애러 문장
                     Toast.makeText(this, "login error!", Toast.LENGTH_SHORT).show()
-                    Log.d("로그", "login error!")
+                    Log.d("로그", "error", task.exception)
                 }
             }
     }
@@ -162,8 +167,8 @@ class MainActivity : AppCompatActivity() {
         //회원가입 및 로그인
         fun signinAndSignup() {
             auth?.createUserWithEmailAndPassword(
-                text_edit_id.text.toString(),
-                text_edit_password.text.toString()
+                binding.edittext.text.toString(),
+                binding.editpassword.text.toString()
             )?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     // 아이디 생성
@@ -180,8 +185,8 @@ class MainActivity : AppCompatActivity() {
             //로그인
         fun signinEmail() {
             auth?.createUserWithEmailAndPassword(
-                text_edit_id.text.toString(),
-                text_edit_password.text.toString()
+                binding.edittext.text.toString(),
+                binding.editpassword.text.toString()
             )?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     moveMainPage(task.result?.user)

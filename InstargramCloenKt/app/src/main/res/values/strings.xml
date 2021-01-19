@@ -2,5 +2,6 @@
     <string name="app_name">InstargramCloenKt</string>
     <string name="facebook_app_id">125978396036423</string>
     <string name="fb_login_protocol_scheme">fb125978396036423</string>
+    <string name="upload_success" />
 
 </resources>
