@@ -33,21 +33,18 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     var activityMainBinding : ActivityMainBinding? = null
-    var binding = ActivityMainBinding.inflate(layoutInflater)
     var auth: FirebaseAuth? = null
     var googleSignInClient: GoogleSignInClient? = null
     var GOOGLE_LOGIN_CODE = 300
     var callbackManager : CallbackManager? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         var binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         activityMainBinding = binding
         auth = FirebaseAuth.getInstance()
         binding.btnSign.setOnClickListener {
             signinAndSignup()
-
         }
         //3
         binding.btnGoogle.setOnClickListener {
@@ -66,7 +63,10 @@ class MainActivity : AppCompatActivity() {
 //        printHashKey()
         //페이스북 콜백
         callbackManager = CallbackManager.Factory.create()
+    }
 
+    override fun onStart() {
+        super.onStart()
     }
     //facebook 해쉬키 생성
     fun printHashKey() {
@@ -166,6 +166,7 @@ class MainActivity : AppCompatActivity() {
         }
         //회원가입 및 로그인
         fun signinAndSignup() {
+            var binding = ActivityMainBinding.inflate(layoutInflater)
             auth?.createUserWithEmailAndPassword(
                 binding.edittext.text.toString(),
                 binding.editpassword.text.toString()
@@ -184,6 +185,7 @@ class MainActivity : AppCompatActivity() {
         }
             //로그인
         fun signinEmail() {
+                var binding = ActivityMainBinding.inflate(layoutInflater)
             auth?.createUserWithEmailAndPassword(
                 binding.edittext.text.toString(),
                 binding.editpassword.text.toString()
